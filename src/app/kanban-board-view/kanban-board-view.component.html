@@ -1,0 +1,34 @@
+<div class="kanban-board" cdkDropListGroup cdkScrollable>
+  <ng-container *ngFor="let status of statusList;">
+    <div class="kanban-board-container" [ngClass]="{'kanban-board-container-disabled':status?.disabled}">
+      <div class="kanban-board-title">
+        <div class="main-title">
+          {{status.name}}
+          <span class="blink" *ngIf="(dataList | filter:'statusId':status.statusId)?.length > 0">
+            {{(dataList | filter:'statusId':status.statusId)?.length}}
+          </span>
+        </div>
+      </div>
+
+      <div cdkDropList [cdkDropListData]="dataList | filter:'statusId':status.statusId" class="kanban-board-list"
+        (cdkDropListDropped)="drop($event)">
+        <div class="kanban-board-box" *ngFor="let item of dataList | filter:'statusId':status.statusId" cdkDrag
+          (cdkDragStarted)="cdkDragStarted($event)" (cdkDragEnded)="cdkDragEnded($event)" [title]="item.tooltip">
+          <div class="item-block">
+            <div>
+              <div class="title"> {{item.title}} </div>
+              <div class="sub-title"> {{item.topicName}} </div>
+            </div>
+            <div class="action-row">
+              <div class="short-name">
+                <span [title]="'Assign User: ' + item?.supportUser?.firstName + ' ' + item?.supportUser?.lastName">
+                  {{(item?.supportUser?.firstName + ' ' + item?.supportUser?.lastName) | firstLetterWord}}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</div>
